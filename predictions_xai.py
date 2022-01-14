@@ -19,7 +19,7 @@ from evalml.model_understanding.prediction_explanations import explain_predictio
 ##########
 #Configuração do Streamlit
 ##########
-st.set_page_config(page_title='Inteledge - Simulador de Crédito', page_icon="💡", layout="centered", initial_sidebar_state="auto", menu_items=None)
+st.set_page_config(page_title='Inteledge - Simulador de Vendas', page_icon="💡", layout="centered", initial_sidebar_state="auto", menu_items=None)
 
 ##########
 #Funções para as previsões e para a organização da pãgina
@@ -229,4 +229,4 @@ st.write('Do ponto de vista de Ciência de Dados você precisa saber **como** um
 for fig in get_global_explanations(pdp, pdp_relationship):
 	st.plotly_chart(fig)
     
-st.markdown('Instagram e Contato: [@inteledge.lab](https://instagram.com/inteledge.lab)')
+st.markdown('Siga-nos no Instagram! [@inteledge.lab](https://instagram.com/inteledge.lab)')
