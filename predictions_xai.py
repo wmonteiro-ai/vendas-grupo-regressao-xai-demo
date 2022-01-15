@@ -51,7 +51,8 @@ def get_samples(target):
 
 @st.cache(allow_output_mutation=True)
 def get_global_explanations(pdp, pdp_relationship):
-	figures = []
+	figures_oneway = []
+	figures_twoway = []
 	
 	# Por UF
 	fig = px.bar(pdp['UF'].sort_values(by='partial_dependence', ascending=False),
@@ -62,8 +63,7 @@ def get_global_explanations(pdp, pdp_relationship):
 					"partial_dependence": "Alteração na predição",
 					"feature_values": 'UF'
 				})
-	fig.update_layout(title=f'Influência dos diferentes valores de <em>UF</em> na previsão')
-	figures.append(fig)
+	figures_oneway.append((fig, 'Influência dos diferentes valores de UF na previsão'))
 	
 	# Por variáveis numéricas
 	keys = ['Inscritos', 'Isentos', 'Confirmados', 'Dia do Pedido', 'Mês do Pedido']
@@ -74,8 +74,7 @@ def get_global_explanations(pdp, pdp_relationship):
 						"partial_dependence": "Alteração na predição",
 						"feature_values": f"Valor de {keys[i]}"
 					})
-		fig.update_layout(title=f'Influência dos diferentes valores de <em>{keys[i]}</em> na previsão')
-		figures.append(fig)
+		figures_oneway.append((fig, f'Influência dos diferentes valores de {keys[i]} na previsão'))
 	
 	# Por 2 variáveis
 	for key in [('Inscritos', 'Confirmados'), ('Inscritos', 'Isentos'), ('Confirmados', 'Isentos')]:
@@ -92,11 +91,10 @@ def get_global_explanations(pdp, pdp_relationship):
 			x, y, z = get_values(pdp_relationship[(key[1], key[0])])
 		    
 		fig = go.Figure(data=go.Contour(z=z, x=x, y=y, line_smoothing=0.85))
-		fig.update_layout(title=f'Influência dos diferentes valores de <em>{labels[0]}</em> e <em>{labels[1]}</em> na previsão',
-		                  xaxis_title=labels[0], yaxis_title=labels[1])
-		figures.append(fig)
+		fig.update_layout(xaxis_title=labels[0], yaxis_title=labels[1])
+		figures_twoway.append((fig, f'Influência dos diferentes valores de {labels[0]} e {labels[1]} na previsão'))
 	
-	return figures
+	return figures_oneway, figures_twoway
 
 def plot_importances(best_pipeline, df):
 	# predictions
@@ -159,7 +157,7 @@ target = 'Total Pedido (R$)'
 df, df_negados, df_aprovados = get_samples(target)
 
 ##########
-#Seção 1 - Histõrico
+#Seção 1 - Histórico
 ##########
 col1, _, _ = st.columns(3)
 with col1:
@@ -167,7 +165,7 @@ with col1:
 
 st.title('Simulador de Vendas')
 st.markdown('Imagine o seguinte caso: você é um gerente de vendas de uma empresa que vende treinamentos e capacitações para outras empresas de todo o país. Esses treinamentos podem ser para empresas privadas ou estatais; podem ser treinamentos para pequenas ou grandes empresas; podem ter um grande número de pagantes ou de isentos. Uma coisa é oferecer um curso para uma empresa grande - outro, é garantir que você terá um grande número de **participantes**: afinal, é assim que você ganha o seu dinheiro.')
-st.markdown('E agora, como prever comportamentos futuros? Como simular **quanto** você realmente receberá? É para isso que desenvolvemos uma Inteligência artificial para previsão de vendas. Imagine que isto pode ser aplicado também para outros tipos de vendas -- já imaginou as possibilidades para você? Ficou interessado em fazer algo parecido para o seu negócio? Entre em contato conosco no [@inteledge.lab](https://instagram.com/inteledge.lab) no Instagram!')
+st.markdown('E agora, como prever comportamentos futuros? Como simular **quanto** você realmente receberá? É para isso que desenvolvemos uma Inteligência artificial para previsão de vendas. Imagine que isto pode ser aplicado também para outros tipos de vendas -- já imaginou as possibilidades para você? Ficou interessado em fazer algo parecido para o seu negócio? Entre em contato conosco no @inteledge.lab no [Instagram](https://instagram.com/inteledge.lab) ou no [LinkedIn](https://linkedin.com/inteledge.lab)!')
 st.markdown('Confira também [algumas análises que fizemos em outra base de dados](https://share.streamlit.io/wmonteiro92/vendas-concessao-credito-analise-demo/main/exploration.py) e [outro algoritmo de IA que também criamos para você simular à vontade](https://share.streamlit.io/wmonteiro92/vendas-concessao-credito-xai-demo/main/predictions_xai.py)!')
 ##########
 #Seção 2 - Simulador
@@ -226,7 +224,15 @@ with col2:
 st.header('Entendendo como o algoritmo aprendeu')
 st.write('Do ponto de vista de Ciência de Dados você precisa saber **como** um algoritmo chegou a uma decisão. Naturalmente, nenhum algoritmo será 100% preciso. Por outro lado, será que ele está aprendendo corretamente as relações entre os dados? Será que há algum tipo de erro nos dados, ou alguma coisa não faz sentido? Veja abaixo os comportamentos aprendidos pela Inteligência Artificial a partir de uma base de dados de treinamento.')
 
-for fig in get_global_explanations(pdp, pdp_relationship):
-	st.plotly_chart(fig)
+figures_oneway, figures_twoway = get_global_explanations(pdp, pdp_relationship)
+
+for fig in figures_oneway:
+	st.subheader(fig[1])
+	st.plotly_chart(fig[0], use_container_width=True)
+
+st.write('Também é possível vermos os relacionamentos entre diferentes atributos: será que toda vez que o número de inscritos aumenta e o de confirmados aumenta o valor que poderemos ganhar também aumentará? E em qual proporção? Os gráficos abaixo nos ajudam a entender isto, e de forma simples - quanto mais clara a cor, mais poderemos ganhar. É claro que outras colunas também são levadas em consideração. Logo, imagine isto como um direcionador para você entender os relacionamentos que o algoritmo aprendeu, mas não que isto sempre será uma regra. Afinal de contas, o mundo dos negócios não é uma ciência exata, nã é?')
+for fig in figures_twoway:
+	st.subheader(fig[1])
+	st.plotly_chart(fig[0], use_container_width=True)
     
-st.markdown('Siga-nos no Instagram! [@inteledge.lab](https://instagram.com/inteledge.lab)')
+st.markdown('Siga-nos no [Instagram](https://instagram.com/inteledge.lab) e no [LinkedIn](https://linkedin.com/inteledge.lab)!')
