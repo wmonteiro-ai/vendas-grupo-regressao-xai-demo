@@ -165,7 +165,7 @@ with col1:
 
 st.title('Simulador de Vendas')
 st.markdown('Imagine o seguinte caso: você é um gerente de vendas de uma empresa que vende treinamentos e capacitações para outras empresas de todo o país. Esses treinamentos podem ser para empresas privadas ou estatais; podem ser treinamentos para pequenas ou grandes empresas; podem ter um grande número de pagantes ou de isentos. Uma coisa é oferecer um curso para uma empresa grande - outro, é garantir que você terá um grande número de **participantes**: afinal, é assim que você ganha o seu dinheiro.')
-st.markdown('E agora, como prever comportamentos futuros? Como simular **quanto** você realmente receberá? É para isso que desenvolvemos uma Inteligência artificial para previsão de vendas. Imagine que isto pode ser aplicado também para outros tipos de vendas -- já imaginou as possibilidades para você? Ficou interessado em fazer algo parecido para o seu negócio? Entre em contato conosco no @inteledge.lab no [Instagram](https://instagram.com/inteledge.lab) ou no [LinkedIn](https://linkedin.com/inteledge.lab)!')
+st.markdown('E agora, como prever comportamentos futuros? Como simular **quanto** você realmente receberá? É para isso que desenvolvemos uma Inteligência artificial para previsão de vendas. Imagine que isto pode ser aplicado também para outros tipos de vendas -- já imaginou as possibilidades para você? Ficou interessado em fazer algo parecido para o seu negócio? Entre em contato conosco no @inteledge.lab no [Instagram](https://instagram.com/inteledge.lab) ou no [LinkedIn](https://www.linkedin.com/company/inteledge/)!')
 st.markdown('Confira também [algumas análises que fizemos em outra base de dados](https://share.streamlit.io/wmonteiro92/vendas-concessao-credito-analise-demo/main/exploration.py) e [outro algoritmo de IA que também criamos para você simular à vontade](https://share.streamlit.io/wmonteiro92/vendas-concessao-credito-xai-demo/main/predictions_xai.py)!')
 ##########
 #Seção 2 - Simulador
@@ -235,4 +235,4 @@ for fig in figures_twoway:
 	st.subheader(fig[1])
 	st.plotly_chart(fig[0], use_container_width=True)
     
-st.markdown('Siga-nos no [Instagram](https://instagram.com/inteledge.lab) e no [LinkedIn](https://linkedin.com/inteledge.lab)!')
+st.markdown('Siga-nos no [Instagram](https://instagram.com/inteledge.lab) e no [LinkedIn](https://www.linkedin.com/company/inteledge/)!')
